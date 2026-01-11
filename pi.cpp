@@ -35,6 +35,14 @@ int main(int argc, char* argv[]) {
         result = sum * step;
     };
 
+    for (int i = 0; i < num_threads; ++i) {
+        threads.emplace_back(compute_part, i, std::ref(partial_sums[i]));
+    }
+
+    for (auto& t : threads) {
+        t.join();
+    }
+    
     double pi = std::accumulate(partial_sums.begin(), partial_sums.end(), 0.0);
     auto end_time = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end_time - start_time;
