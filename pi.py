@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import time
 
 # Konfiguracja
-executable = "./pi_calc.exe"  # lub ./pi_calc na Linux
+executable = "./pi_calc.exe"  
 steps_list = [100_000_000, 1_000_000_000, 3_000_000_000]
 threads_list = list(range(1, 51))
 
@@ -16,10 +16,8 @@ for steps in steps_list:
         process = subprocess.run([executable, str(steps), str(threads)], 
                                  capture_output=True, text=True)
         
-        # Parsowanie czasu z outputu programu C++
         output = process.stdout.splitlines()
         try:
-            # Szukamy linii z czasem
             duration = float([line for line in output if "Czas" in line][0].split(":")[1].split()[0])
             results[steps].append(duration)
             print(f"  Wątki: {threads} -> {duration}s")
